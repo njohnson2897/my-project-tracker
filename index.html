@@ -22,16 +22,17 @@
   </header>
   <div class="container">
     <div class="text-center mb-5">
-      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal">Add Task</button>
+      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Task</button>
     </div>
     <!-- Todo: Create a modal with a form to add tasks -->
     <!-- modal code source: https://getbootstrap.com/docs/4.3/components/modal/ -->
-    <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+      aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLongTitle">Add a Task</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -41,16 +42,16 @@
               <div class="row">
                 <div class="col">
                   <label for="taskName">Task Name:</label>
-                  <input type="text" class="form-control" >
+                  <input type="text" id="taskName" class="form-control">
                 </div>
                 <div class="col">
                   <label for="taskDueDate">Task Due:</label>
-                  <input type="text" id="datepicker" class="form-control">
+                  <input type="text" id="taskDueDate" class="form-control">
                 </div>
               </div>
               <div class="row">
                 <label for="taskDescription">Task Description:</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <textarea class="form-control" id="taskDescription" rows="3"></textarea>
               </div>
             </form>
           </div>
@@ -80,16 +81,16 @@
             <div id="in-progress-cards"></div>
           </div>
         </div>
+      </div>
+      <div class="col-12 col-lg-4 d-flex">
+        <div id="done" class="card border-light mb-3 lane flex-grow-1">
+          <div class="card-header bg-white">
+            <h2 class="card-title mb-1">Done</h2>
+          </div>
+          <div class="card-body bg-light">
+            <div id="done-cards"></div>
+          </div>
         </div>
-        <div class="col-12 col-lg-4 d-flex">
-          <div id="done" class="card border-light mb-3 lane flex-grow-1">
-            <div class="card-header bg-white">
-              <h2 class="card-title mb-1">Done</h2>
-            </div>
-            <div class="card-body bg-light">
-              <div id="done-cards"></div>
-          </div>
-          </div>
       </div>
     </div>
   </div>
