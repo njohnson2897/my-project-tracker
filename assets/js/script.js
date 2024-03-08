@@ -2,6 +2,8 @@ const taskTitleEl = document.querySelector('#taskName');
 const taskDueDateEl = document.querySelector('#taskDueDate');
 const taskDescriptionEl = document.querySelector('#taskDescription');
 
+const today = dayjs().format('MM[/]DD[/]YYYY');
+
 
 
 // Retrieve tasks and nextId from localStorage
@@ -17,6 +19,7 @@ let nextId = JSON.parse(localStorage.getItem("nextId"));
 
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
+    
 
 }
 
@@ -33,7 +36,16 @@ function createTaskCard(task) {
     const cardDescription = $('<p>');
     cardDescription.addClass('card-text').text(tasks.description);
     const cardDeleteBtn = $('<button>')
-    cardDeleteBtn.addClass('btn btn-danger delete').text('Delete').attr('id', "cardDeleteBtn")
+    cardDeleteBtn.addClass('btn btn-danger delete').text('Delete').attr('data-task-id',  task.id);
+
+    if(tasks.dueDate && tasks.status  !== 'done')  {
+        const taskDueDate =  dayjs(tasks.dueDate, 'MM[/]DD[/]YYYY');
+        if(today.isSame(taskDueDate, 'day')) {
+        taskCard.addClass('bg-warning text-white');
+        } else if (today.isAfter(taskDueDate)) {
+            taskCard.addClass('bg-danger text-white');
+        }
+    }
 
     cardBody.append(cardTitle, cardDue, cardDescription, cardDeleteBtn);
     taskCard.append(cardBody);
