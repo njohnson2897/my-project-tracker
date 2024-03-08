@@ -4,9 +4,6 @@ const taskDescriptionEl = document.querySelector('#taskDescription');
 
 const today = dayjs()
 
-
-
-
 // Retrieve tasks and nextId from localStorage
 function readStoredTasks() {
 let tasks = JSON.parse(localStorage.getItem("tasks"));
@@ -32,7 +29,7 @@ function createTaskCard(task) {
     const cardTitle = $('<h3>');
     cardTitle.addClass('card-title').text(task.name);
     const cardDue = $('<h6>');
-    cardDue.addClass('card-subtitle mb-2').text(task.dueDate);
+    cardDue.addClass('card-subtitle mb-2').text(`Due on: ${task.dueDate}`);
     const cardDescription = $('<p>');
     cardDescription.addClass('card-text').text(task.description);
     const cardDeleteBtn = $('<button>')
@@ -151,4 +148,6 @@ $(document).ready(function () {
 
     $('#addTaskBtn').on('click', handleAddTask);
     $('#todo-cards').on('click', 'button', handleDeleteTask);
+    $('#in-progress-cards').on('click', 'button', handleDeleteTask);
+    $('#done-cards').on('click', 'button', handleDeleteTask);
 });
