@@ -3,8 +3,7 @@ const taskDueDateEl = document.querySelector('#taskDueDate');
 const taskDescriptionEl = document.querySelector('#taskDescription');
 
 const today = dayjs()
-console.log(today);
-console.log(typeof today);
+
 
 
 
@@ -33,14 +32,12 @@ function generateTaskId() {
 
 // Todo: create a function to create a task card
 function createTaskCard(task) {
-    console.log(task);
     const taskCard = $('<div>');
     taskCard.addClass('task-card task-card:hover card').attr('data-task-id', task.id)
     const cardBody = $('<div>');
     cardBody.addClass('card-body');
     const cardTitle = $('<h3>');
     cardTitle.addClass('card-title').text(task.name);
-    console.log(task);
     const cardDue = $('<h6>');
     cardDue.addClass('card-subtitle mb-2 text-muted').text(task.dueDate);
     const cardDescription = $('<p>');
@@ -110,9 +107,16 @@ function handleAddTask(event){
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event){
     event.preventDefault();
+    const thisTaskId = $(this).attr('data-project-id');
+    const tasks = readStoredTasks();
 
-
-
+    tasks.forEach((task) => {
+        if (task.id === thisTaskId) {
+            tasks.splice(tasks.indexOf(task), 1);
+        }
+    });
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    renderTaskList();
 }
 
 // Todo: create a function to handle dropping a task into a new status lane
