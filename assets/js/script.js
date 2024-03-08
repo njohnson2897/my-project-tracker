@@ -55,8 +55,25 @@ function createTaskCard(task) {
 
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
+    $('#todo-cards').empty();
+    $('#in-progress-cards').empty();
+    $('#done-cards').empty();
 
-}
+    for (let task of tasks) {
+        if(task.status === 'to-do') {
+            $('#todo-cards').append(createTaskCard(task));
+        } else if (task.status === 'in-progress')  {
+            $('#in-progress-cards').append(createTaskCard(task));
+        } else if (task.status === 'done') {
+            $('#done-cards').append(createTaskCard(task));
+        }
+    }
+
+    $('draggable').draggable({
+        opacity: 0.7
+        zIndex:  2,
+    });
+ }
 
 // Todo: create a function to handle adding a new task
 function handleAddTask(event){
@@ -72,10 +89,6 @@ function handleAddTask(event){
     } else {
     tasks.push(newTask);
     localStorage.setItem('tasks', JSON.stringify(tasks));
-
-    $('#todo-cards').empty();
-    $('#in-progress-cards').empty();
-    $('#done-cards').empty();
 }};
 
 // Todo: create a function to handle deleting a task
@@ -90,11 +103,17 @@ function handleDrop(event, ui) {
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
-    // renderTaskList();
+    renderTaskList();
+    $('.lane').droppable({
+        accept: '.draggable',
+        drop: handleDrop,
+    });
+
     $( "#taskDueDate" ).datepicker({
         changeMonth: true,
         changeYear:  true,
     });
+    
     $('#addTaskBtn').on('click', handleAddTask);
     $('#cardDeleteBtn').on('click', handleDeleteTask)
 });
