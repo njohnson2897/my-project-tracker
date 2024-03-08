@@ -1,5 +1,18 @@
+const taskTitleEl = document.querySelector('#taskName');
+const taskDueDateEl = document.querySelector('#taskDueDate');
+const taskDescriptionEl = document.querySelector('#taskDescription');
+
+
+
 // Retrieve tasks and nextId from localStorage
-let taskList = JSON.parse(localStorage.getItem("tasks"));
+function readStoredTasks() {
+let tasks = JSON.parse(localStorage.getItem("tasks"));
+    if (!tasks) {
+        tasks = [];
+    }
+    return tasks;
+};
+
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 
 // Todo: create a function to generate a unique task id
@@ -14,11 +27,11 @@ function createTaskCard(task) {
     const cardBody = $('<div>');
     cardBody.addClass('card-body');
     const cardTitle = $('<h5>');
-    cardTitle.addClass('card-title').text(task.name);
+    cardTitle.addClass('card-title').text(tasks.name);
     const cardDue = $('<h6>');
-    cardDue.addClass('card-subtitle mb-2 text-muted').text(task.dueDate);
+    cardDue.addClass('card-subtitle mb-2 text-muted').text(tasks.dueDate);
     const cardDescription = $('<p>');
-    cardDescription.addClass('card-text').text(task.description);
+    cardDescription.addClass('card-text').text(tasks.description);
     const cardDeleteBtn = $('<button>')
     cardDeleteBtn.addClass('btn btn-danger delete').text('Delete').attr('id', "cardDeleteBtn")
 
@@ -35,8 +48,16 @@ function renderTaskList() {
 
 // Todo: create a function to handle adding a new task
 function handleAddTask(event){
-
-}
+    event.preventDefault();
+    const newTask = {
+        name: taskTitleEl.value.trim(),
+        dueDate: taskDueDateEl.value,
+        description: taskDescriptionEl.value,
+    }
+    const tasks = readStoredTasks();
+    tasks.push(newTask);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+};
 
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event){
@@ -50,8 +71,11 @@ function handleDrop(event, ui) {
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
-    // https://jqueryui.com/datepicker/
-    $( "#taskDueDate" ).datepicker();
-    $('#addTaskBtn').on('click', handleAddTask());
+    // renderTaskList();
+    $( "#taskDueDate" ).datepicker({
+        changeMonth: true,
+        changeYear:  true,
+    });
+    $('#addTaskBtn').on('click', handleAddTask);
     $('#cardDeleteBtn').on('click', handleDeleteTask)
 });
