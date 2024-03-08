@@ -20,7 +20,12 @@ function createTaskCard(task) {
     const cardDescription = $('<p>');
     cardDescription.addClass('card-text').text(task.description);
     const cardDeleteBtn = $('<button>')
-    cardDeleteBtn.addClass('btn btn-danger delete').text('Delete').
+    cardDeleteBtn.addClass('btn btn-danger delete').text('Delete').attr('id', "cardDeleteBtn")
+
+    cardBody.append(cardTitle, cardDue, cardDescription, cardDeleteBtn);
+    taskCard.append(cardBody);
+
+    return taskCard;
 }
 
 // Todo: create a function to render the task list and make cards draggable
@@ -48,4 +53,5 @@ $(document).ready(function () {
     // https://jqueryui.com/datepicker/
     $( "#taskDueDate" ).datepicker();
     $('#addTaskBtn').on('click', handleAddTask());
+    $('#cardDeleteBtn').on('click', handleDeleteTask)
 });
