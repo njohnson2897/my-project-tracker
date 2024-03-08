@@ -106,6 +106,9 @@ function handleAddTask(event){
     tasks.push(newTask);
     localStorage.setItem('tasks', JSON.stringify(tasks));
     renderTaskList();
+    $('#taskName').val('');
+    $('#taskDueDate').val('');
+    $('#taskDescription').val('');
 }};
 
 // Todo: create a function to handle deleting a task
