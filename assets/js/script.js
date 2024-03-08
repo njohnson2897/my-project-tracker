@@ -26,7 +26,7 @@ function generateTaskId() {
 // Todo: create a function to create a task card
 function createTaskCard(task) {
     const taskCard = $('<div>');
-    taskCard.addClass('task-card task-card:hover ui-widget-content card').attr('id', 'draggable')
+    taskCard.addClass('task-card task-card:hover draggable ui-widget-content card')
     const cardBody = $('<div>');
     cardBody.addClass('card-body');
     const cardTitle = $('<h3>');
@@ -71,11 +71,20 @@ function renderTaskList() {
         }
     }
 
-    $('#draggable').draggable({
+    $('.draggable').draggable({
         opacity: 0.7,
-        zIndex:  2,
-    });
- }
+        zIndex:  100,
+    //   I got this helper function from a mini project we worked through in class
+        helper: function (event) {
+            const original = $(event.target).hasClass('ui-draggable')
+              ? $(event.target)
+              : $(event.target).closest('.ui-draggable');
+            return original.clone().css({
+              width: original.outerWidth(),
+            });
+          },
+        });
+      }
 
 // Todo: create a function to handle adding a new task
 function handleAddTask(event){
@@ -131,7 +140,6 @@ $(document).ready(function () {
     renderTaskList();
 
     $('.lane').droppable({
-        accept: '.draggable',
         drop: handleDrop,
     });
 
