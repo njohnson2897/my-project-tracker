@@ -2,7 +2,9 @@ const taskTitleEl = document.querySelector('#taskName');
 const taskDueDateEl = document.querySelector('#taskDueDate');
 const taskDescriptionEl = document.querySelector('#taskDescription');
 
-const today = dayjs().format('MM[/]DD[/]YYYY');
+const today = dayjs()
+console.log(today);
+console.log(typeof today);
 
 
 
@@ -15,35 +17,45 @@ let tasks = JSON.parse(localStorage.getItem("tasks"));
     return tasks;
 };
 
+function readStoredIds() {
 let nextId = JSON.parse(localStorage.getItem("nextId"));
+    if(!nextID) {
+        nextID = [];
+    }
+    return nextID;
+};
 
 // Todo: create a function to generate a unique task id
-function generateTaskId() {
-    
-
+function generateTaskId() {  
+    const taskID = self.crypto.randomUUID();
+    return taskID;
 }
 
 // Todo: create a function to create a task card
 function createTaskCard(task) {
+    console.log(task);
     const taskCard = $('<div>');
-    taskCard.addClass('task-card task-card:hover card');
+    taskCard.addClass('task-card task-card:hover card').attr('data-task-id', task.id)
     const cardBody = $('<div>');
     cardBody.addClass('card-body');
-    const cardTitle = $('<h5>');
-    cardTitle.addClass('card-title').text(tasks.name);
+    const cardTitle = $('<h3>');
+    cardTitle.addClass('card-title').text(task.name);
+    console.log(task);
     const cardDue = $('<h6>');
-    cardDue.addClass('card-subtitle mb-2 text-muted').text(tasks.dueDate);
+    cardDue.addClass('card-subtitle mb-2 text-muted').text(task.dueDate);
     const cardDescription = $('<p>');
-    cardDescription.addClass('card-text').text(tasks.description);
+    cardDescription.addClass('card-text').text(task.description);
     const cardDeleteBtn = $('<button>')
-    cardDeleteBtn.addClass('btn btn-danger delete').text('Delete').attr('data-task-id',  task.id);
+    cardDeleteBtn.addClass('btn btn-danger delete').text('Delete').attr('data-task-id', task.id)
+    $('#cardDeleteBtn').on('click', handleDeleteTask)
 
-    if(tasks.dueDate && tasks.status  !== 'done')  {
-        const taskDueDate =  dayjs(tasks.dueDate, 'MM[/]DD[/]YYYY');
+    if(task.dueDate && task.status  !== 'done')  {
+        const taskDueDate =  dayjs(task.dueDate, 'MM[/]DD[/]YYYY');
         if(today.isSame(taskDueDate, 'day')) {
         taskCard.addClass('bg-warning text-white');
         } else if (today.isAfter(taskDueDate)) {
             taskCard.addClass('bg-danger text-white');
+            cardDeleteBtn.addClass('border-light');
         }
     }
 
@@ -55,6 +67,7 @@ function createTaskCard(task) {
 
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
+    const tasks = readStoredTasks();
     $('#todo-cards').empty();
     $('#in-progress-cards').empty();
     $('#done-cards').empty();
@@ -70,7 +83,7 @@ function renderTaskList() {
     }
 
     $('draggable').draggable({
-        opacity: 0.7
+        opacity: 0.7,
         zIndex:  2,
     });
  }
@@ -82,6 +95,8 @@ function handleAddTask(event){
         name: taskTitleEl.value.trim(),
         dueDate: taskDueDateEl.value,
         description: taskDescriptionEl.value,
+        status: 'to-do',
+        id: generateTaskId(),
     }
     const tasks = readStoredTasks();
     if (taskTitleEl.value === '' || taskDueDateEl.value === '' || taskDescriptionEl.value === '') {
@@ -89,10 +104,14 @@ function handleAddTask(event){
     } else {
     tasks.push(newTask);
     localStorage.setItem('tasks', JSON.stringify(tasks));
+    renderTaskList();
 }};
 
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event){
+    event.preventDefault();
+
+
 
 }
 
@@ -104,6 +123,7 @@ function handleDrop(event, ui) {
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
     renderTaskList();
+
     $('.lane').droppable({
         accept: '.draggable',
         drop: handleDrop,
@@ -113,7 +133,6 @@ $(document).ready(function () {
         changeMonth: true,
         changeYear:  true,
     });
-    
+
     $('#addTaskBtn').on('click', handleAddTask);
-    $('#cardDeleteBtn').on('click', handleDeleteTask)
 });
