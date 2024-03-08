@@ -26,7 +26,7 @@ function generateTaskId() {
 // Todo: create a function to create a task card
 function createTaskCard(task) {
     const taskCard = $('<div>');
-    taskCard.addClass('task-card task-card:hover draggable ui-widget-content card')
+    taskCard.addClass('task-card task-card:hover draggable ui-widget-content card').attr('data-task-id', task.id)
     const cardBody = $('<div>');
     cardBody.addClass('card-body');
     const cardTitle = $('<h3>');
@@ -72,7 +72,7 @@ function renderTaskList() {
     }
 
     $('.draggable').draggable({
-        opacity: 0.7,
+        opacity: 1,
         zIndex:  100,
     //   I got this helper function from a mini project we worked through in class
         helper: function (event) {
@@ -124,15 +124,15 @@ function handleDeleteTask(event){
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
     const tasks = readStoredTasks();
-    const newTaskId = ui.draggable[0].dataset.taskID
-    const newStatus =  event.target.status
+    const draggedID = ui.draggable.attr('data-task-id')
+    const newStatus = event.target.id
     for (let task of tasks) {
-        if (task.id === newTaskId) {
-            task.status = newStatus;
+        if (task.id === draggedID){
+            task.status = newStatus
         }
     }
 localStorage.setItem('tasks',  JSON.stringify(tasks));
-renderTaskList;
+renderTaskList();
 }
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
@@ -140,6 +140,7 @@ $(document).ready(function () {
     renderTaskList();
 
     $('.lane').droppable({
+        accept: '.draggable',
         drop: handleDrop,
     });
 
