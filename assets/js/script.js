@@ -55,9 +55,16 @@ function handleAddTask(event){
         description: taskDescriptionEl.value,
     }
     const tasks = readStoredTasks();
+    if (taskTitleEl.value === '' || taskDueDateEl.value === '' || taskDescriptionEl.value === '') {
+        alert('Please fill out all forms');
+    } else {
     tasks.push(newTask);
     localStorage.setItem('tasks', JSON.stringify(tasks));
-};
+
+    $('#todo-cards').empty();
+    $('#in-progress-cards').empty();
+    $('#done-cards').empty();
+}};
 
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event){
